@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.ServiceModel;
 using System.Web.Routing;
-using Nop.Core;
+using Nop.Core.Domain.Orders;
 using Nop.Core.Plugins;
 using Nop.Plugin.SMS.Clickatell.Clickatell;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
+using Nop.Services.Orders;
 
 namespace Nop.Plugin.SMS.Clickatell
 {
@@ -16,54 +18,86 @@ namespace Nop.Plugin.SMS.Clickatell
     /// </summary>
     public class ClickatellSmsProvider : BasePlugin, IMiscPlugin
     {
-        private readonly ILogger _logger;
-        private readonly ISettingService _settingService;
+        #region Fields
+
         private readonly ClickatellSettings _clickatellSettings;
+        private readonly ILogger _logger;
+        private readonly IOrderService _orderService;
+        private readonly ISettingService _settingService;
+
+        #endregion
+
+        #region Ctor
 
         public ClickatellSmsProvider(ClickatellSettings clickatellSettings,
-            ILogger logger, ISettingService settingService)
+            ILogger logger,
+            IOrderService orderService,
+            ISettingService settingService)
         {
             this._clickatellSettings = clickatellSettings;
             this._logger = logger;
+            this._orderService = orderService;
             this._settingService = settingService;
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Sends SMS
+        /// Send SMS 
         /// </summary>
         /// <param name="text">Text</param>
-        public bool SendSms(string text)
+        /// <param name="orderId">Order id</param>
+        /// <param name="settings">Clickatell settings</param>
+        /// <returns>True if SMS was successfully sent; otherwise false</returns>
+        public bool SendSms(string text, int orderId, ClickatellSettings settings = null)
         {
-            try
+            var clickatellSettings = settings ?? _clickatellSettings;
+            if (!clickatellSettings.Enabled)
+                return false;
+
+            //change text
+            var order = _orderService.GetOrderById(orderId);
+            if (order != null)
+                text = string.Format("New order #{0} was placed for the total amount {1:0.00}", order.Id, order.OrderTotal);
+
+            using (var smsClient = new ClickatellSmsClient(new BasicHttpBinding(), new EndpointAddress("http://api.clickatell.com/soap/document_literal/webservice")))
             {
-                using (var svc = new PushServerWSPortTypeClient(new BasicHttpBinding(), new EndpointAddress("http://api.clickatell.com/soap/webservice_vs.php")))
+                //check credentials
+                var authentication = smsClient.auth(int.Parse(clickatellSettings.ApiId), clickatellSettings.Username, clickatellSettings.Password);
+                if (!authentication.ToUpperInvariant().StartsWith("OK"))
                 {
-                    string authRsp = svc.auth(Int32.Parse(_clickatellSettings.ApiId), _clickatellSettings.Username, _clickatellSettings.Password);
+                    _logger.Error(string.Format("Clickatell SMS error: {0}", authentication));
+                    return false;
+                }
 
-                    if (!authRsp.ToUpperInvariant().StartsWith("OK"))
-                    {
-                        throw new NopException(authRsp);
-                    }
+                //send SMS
+                var sessionId = authentication.Substring(4);
+                var result = smsClient.sendmsg(sessionId, int.Parse(clickatellSettings.ApiId), clickatellSettings.Username, clickatellSettings.Password,
+                    text, new [] { clickatellSettings.PhoneNumber }, string.Empty, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    string.Empty, 0, string.Empty, string.Empty, string.Empty, 0).FirstOrDefault();
 
-                    string ssid = authRsp.Substring(4);
-                    string[] sndRsp = svc.sendmsg(ssid,
-                        Int32.Parse(_clickatellSettings.ApiId), _clickatellSettings.Username,
-                        _clickatellSettings.Password, new string[1] { _clickatellSettings.PhoneNumber },
-                        String.Empty, text, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        String.Empty, 0, String.Empty, String.Empty, String.Empty, 0);
-
-                    if (!sndRsp[0].ToUpperInvariant().StartsWith("ID"))
-                    {
-                        throw new NopException(sndRsp[0]);
-                    }
-                    return true;
+                if (result == null || !result.ToUpperInvariant().StartsWith("ID"))
+                {
+                    _logger.Error(string.Format("Clickatell SMS error: {0}", result));
+                    return false;
                 }
             }
-            catch (Exception ex)
+
+            //order note
+            if (order != null)
             {
-                _logger.Error(ex.Message, ex);
+                order.OrderNotes.Add(new OrderNote()
+                {
+                    Note = "\"Order placed\" SMS alert (to store owner) has been sent",
+                    DisplayToCustomer = false,
+                    CreatedOnUtc = DateTime.UtcNow
+                });
+                _orderService.UpdateOrder(order);
             }
-            return false;
+
+            return true;
         }
 
         /// <summary>
@@ -80,40 +114,36 @@ namespace Nop.Plugin.SMS.Clickatell
         }
 
         /// <summary>
-        /// Install plugin
+        /// Install the plugin
         /// </summary>
         public override void Install()
         {
             //settings
-            var settings = new ClickatellSettings()
-            {
-                Enabled = false,
-            };
-            _settingService.SaveSetting(settings);
+            _settingService.SaveSetting(new ClickatellSettings());
 
             //locales
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed", "Test message sending failed");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess", "Test message was sent");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled", "Enabled");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint", "Check to enable SMS provider");
             this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId", "API ID");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId.Hint", "Clickatell API ID");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId.Hint", "Specify Clickatell API ID.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled", "Enabled");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint", "Check to enable SMS provider.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password", "Password");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password.Hint", "Clickatell password");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password.Hint", "Specify Clickatell API password.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber", "Phone number");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber.Hint", "Your phone number");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username", "Username");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint", "Clickatell username");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber.Hint", "Enter your phone number.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage", "Message text");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage.Hint", "Text of the test message");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage.Hint", "Enter text of the test message.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username", "Username");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint", "Specify Clickatell API username.");
             this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.SendTest", "Send");
             this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.SendTest.Hint", "Send test message");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed", "Test message sending failed");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess", "Test message was sent");
 
             base.Install();
         }
 
         /// <summary>
-        /// Uninstall plugin
+        /// Uninstall the plugin
         /// </summary>
         public override void Uninstall()
         {
@@ -121,24 +151,26 @@ namespace Nop.Plugin.SMS.Clickatell
             _settingService.DeleteSetting<ClickatellSettings>();
 
             //locales
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId.Hint");
+            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled");
+            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password.Hint");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage.Hint");
+            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username");
+            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.SendTest");
             this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.SendTest.Hint");
+            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed");
+            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess");
 
             base.Uninstall();
         }
+
+        #endregion
     }
 }

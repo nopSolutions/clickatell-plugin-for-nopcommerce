@@ -18,10 +18,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://api.clickatell.com/soap/webservice_vs.php?wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://api.clickatell.com/soap/document_literal/webservice?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="webservice_vs.wsdl" MetadataType="Wsdl" ID="32d98a5a-232c-4792-8d7a-09b257074e29" SourceId="1" SourceUrl="http://api.clickatell.com/soap/webservice_vs.php?wsdl" />
+    <MetadataFile FileName="ClickatellSms.wsdl" MetadataType="Wsdl" ID="0e711ab0-37c2-4374-bb43-bbf3b5de8b8d" SourceId="1" SourceUrl="http://api.clickatell.com/soap/document_literal/webservice?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

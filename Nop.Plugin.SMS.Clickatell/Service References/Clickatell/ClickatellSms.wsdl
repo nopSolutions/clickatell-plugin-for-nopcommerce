@@ -1,0 +1,846 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://api.clickatell.com/soap/document_literal/webservice" name="ClickatellSms" targetNamespace="http://api.clickatell.com/soap/document_literal/webservice" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation>Clickatell SOAP API</wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://api.clickatell.com/soap/document_literal/webservice">
+      <xsd:element name="auth">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="password" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="authResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendmsg">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="text" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="to" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="from" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="concat" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="msg_callback" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_ack" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_time" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="max_credits" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="req_feat" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="queue" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="escalate" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="mo" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="climsgid" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="unicode" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="msg_type" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="udh" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="data" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="validity" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendmsgResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ping">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="session_id" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="pingResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="querymsg">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="apimsgid" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="climsgid" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="querymsgResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="delmsg">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="apimsgid" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="climsgid" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="delmsgResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getbalance">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getbalanceResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="routecoverage">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="msisdn" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="routecoverageResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="si_push">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="to" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="si_id" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="si_url" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="si_text" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="si_created" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="si_expires" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="si_action" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="from" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="concat" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_ack" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="msg_callback" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_time" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="max_credits" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="req_feat" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="queue" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="escalate" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="mo" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="climsgid" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="unicode" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="validity" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="si_pushResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ind_push">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="to" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="mms_subject" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="mms_class" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="mms_expire" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="mms_from" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="mms_url" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="from" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="concat" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_ack" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="msg_callback" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_time" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="max_credits" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="req_feat" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="queue" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="escalate" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="mo" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="climsgid" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="validity" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ind_pushResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="token_pay">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="token" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="token_payResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="startbatch">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="from" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="concat" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="template" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_ack" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="msg_callback" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="deliv_time" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="max_credits" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="req_feat" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="queue" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="escalate" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="mo" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="climsgid" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="unicode" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="msg_type" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="udh" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="validity" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="startbatchResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="senditem">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="batch_id" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="to" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field1" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field2" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field3" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field4" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field5" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field6" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field7" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field8" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field9" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="field10" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="senditemResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="quicksend">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="batch_id" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="to" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="quicksendResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="unbounded" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="endbatch">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="batch_id" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="endbatchResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getmsgcharge">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="session_id" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="api_id" type="xsd:int" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="user" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="password" type="xsd:string" />
+            <xsd:element minOccurs="0" maxOccurs="1" name="apimsgid" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getmsgchargeResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="return" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="authFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="authFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="pingFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="pingFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="sendmsgFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="sendmsgFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="querymsgFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="querymsgFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="delmsgFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="delmsgFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getbalanceFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="getbalanceFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="routecoverageFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="routecoverageFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="si_pushFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="si_pushFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ind_pushFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="ind_pushFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="token_payFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="token_payFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="startbatchFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="startbatchFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="senditemFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="senditemFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="quicksendFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="quicksendFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="endbatchFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="endbatchFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getmsgchargeFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="getmsgchargeFault" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="authRequest">
+    <wsdl:part name="parameters" element="tns:auth" />
+  </wsdl:message>
+  <wsdl:message name="authResponse">
+    <wsdl:part name="parameters" element="tns:authResponse" />
+  </wsdl:message>
+  <wsdl:message name="sendmsgRequest">
+    <wsdl:part name="parameters" element="tns:sendmsg" />
+  </wsdl:message>
+  <wsdl:message name="sendmsgResponse">
+    <wsdl:part name="parameters" element="tns:sendmsgResponse" />
+  </wsdl:message>
+  <wsdl:message name="pingRequest">
+    <wsdl:part name="parameters" element="tns:ping" />
+  </wsdl:message>
+  <wsdl:message name="pingResponse">
+    <wsdl:part name="parameters" element="tns:pingResponse" />
+  </wsdl:message>
+  <wsdl:message name="querymsgRequest">
+    <wsdl:part name="parameters" element="tns:querymsg" />
+  </wsdl:message>
+  <wsdl:message name="querymsgResponse">
+    <wsdl:part name="parameters" element="tns:querymsgResponse" />
+  </wsdl:message>
+  <wsdl:message name="delmsgRequest">
+    <wsdl:part name="parameters" element="tns:delmsg" />
+  </wsdl:message>
+  <wsdl:message name="delmsgResponse">
+    <wsdl:part name="parameters" element="tns:delmsgResponse" />
+  </wsdl:message>
+  <wsdl:message name="getbalanceRequest">
+    <wsdl:part name="parameters" element="tns:getbalance" />
+  </wsdl:message>
+  <wsdl:message name="getbalanceResponse">
+    <wsdl:part name="parameters" element="tns:getbalanceResponse" />
+  </wsdl:message>
+  <wsdl:message name="routecoverageRequest">
+    <wsdl:part name="parameters" element="tns:routecoverage" />
+  </wsdl:message>
+  <wsdl:message name="routecoverageResponse">
+    <wsdl:part name="parameters" element="tns:routecoverageResponse" />
+  </wsdl:message>
+  <wsdl:message name="si_pushRequest">
+    <wsdl:part name="parameters" element="tns:si_push" />
+  </wsdl:message>
+  <wsdl:message name="si_pushResponse">
+    <wsdl:part name="parameters" element="tns:si_pushResponse" />
+  </wsdl:message>
+  <wsdl:message name="ind_pushRequest">
+    <wsdl:part name="parameters" element="tns:ind_push" />
+  </wsdl:message>
+  <wsdl:message name="ind_pushResponse">
+    <wsdl:part name="parameters" element="tns:ind_pushResponse" />
+  </wsdl:message>
+  <wsdl:message name="token_payRequest">
+    <wsdl:part name="parameters" element="tns:token_pay" />
+  </wsdl:message>
+  <wsdl:message name="token_payResponse">
+    <wsdl:part name="parameters" element="tns:token_payResponse" />
+  </wsdl:message>
+  <wsdl:message name="startbatchRequest">
+    <wsdl:part name="parameters" element="tns:startbatch" />
+  </wsdl:message>
+  <wsdl:message name="startbatchResponse">
+    <wsdl:part name="parameters" element="tns:startbatchResponse" />
+  </wsdl:message>
+  <wsdl:message name="senditemRequest">
+    <wsdl:part name="parameters" element="tns:senditem" />
+  </wsdl:message>
+  <wsdl:message name="senditemResponse">
+    <wsdl:part name="parameters" element="tns:senditemResponse" />
+  </wsdl:message>
+  <wsdl:message name="quicksendRequest">
+    <wsdl:part name="parameters" element="tns:quicksend" />
+  </wsdl:message>
+  <wsdl:message name="quicksendResponse">
+    <wsdl:part name="parameters" element="tns:quicksendResponse" />
+  </wsdl:message>
+  <wsdl:message name="endbatchRequest">
+    <wsdl:part name="parameters" element="tns:endbatch" />
+  </wsdl:message>
+  <wsdl:message name="endbatchResponse">
+    <wsdl:part name="parameters" element="tns:endbatchResponse" />
+  </wsdl:message>
+  <wsdl:message name="getmsgchargeRequest">
+    <wsdl:part name="parameters" element="tns:getmsgcharge" />
+  </wsdl:message>
+  <wsdl:message name="getmsgchargeResponse">
+    <wsdl:part name="parameters" element="tns:getmsgchargeResponse" />
+  </wsdl:message>
+  <wsdl:message name="authFault">
+    <wsdl:part name="parameters" element="tns:authFault" />
+  </wsdl:message>
+  <wsdl:message name="pingFault">
+    <wsdl:part name="parameters" element="tns:pingFault" />
+  </wsdl:message>
+  <wsdl:message name="sendmsgFault">
+    <wsdl:part name="parameters" element="tns:sendmsgFault" />
+  </wsdl:message>
+  <wsdl:message name="querymsgFault">
+    <wsdl:part name="parameters" element="tns:querymsgFault" />
+  </wsdl:message>
+  <wsdl:message name="delmsgFault">
+    <wsdl:part name="parameters" element="tns:delmsgFault" />
+  </wsdl:message>
+  <wsdl:message name="getbalanceFault">
+    <wsdl:part name="parameters" element="tns:getbalanceFault" />
+  </wsdl:message>
+  <wsdl:message name="routecoverageFault">
+    <wsdl:part name="parameters" element="tns:routecoverageFault" />
+  </wsdl:message>
+  <wsdl:message name="si_pushFault">
+    <wsdl:part name="parameters" element="tns:si_pushFault" />
+  </wsdl:message>
+  <wsdl:message name="ind_pushFault">
+    <wsdl:part name="parameters" element="tns:ind_pushFault" />
+  </wsdl:message>
+  <wsdl:message name="token_payFault">
+    <wsdl:part name="parameters" element="tns:token_payFault" />
+  </wsdl:message>
+  <wsdl:message name="startbatchFault">
+    <wsdl:part name="parameters" element="tns:startbatchFault" />
+  </wsdl:message>
+  <wsdl:message name="senditemFault">
+    <wsdl:part name="parameters" element="tns:senditemFault" />
+  </wsdl:message>
+  <wsdl:message name="quicksendFault">
+    <wsdl:part name="parameters" element="tns:quicksendFault" />
+  </wsdl:message>
+  <wsdl:message name="endbatchFault">
+    <wsdl:part name="parameters" element="tns:endbatchFault" />
+  </wsdl:message>
+  <wsdl:message name="getmsgchargeFault">
+    <wsdl:part name="parameters" element="tns:getmsgchargeFault" />
+  </wsdl:message>
+  <wsdl:portType name="ClickatellSms">
+    <wsdl:documentation>Please read our SOAP API PDF guide document.</wsdl:documentation>
+    <wsdl:operation name="auth">
+      <wsdl:documentation>Optionally authenticate to generate a session id that can be used for future API calls</wsdl:documentation>
+      <wsdl:input name="authRequest" message="tns:authRequest" />
+      <wsdl:output name="authResponse" message="tns:authResponse" />
+      <wsdl:fault name="fault" message="tns:authFault" />
+    </wsdl:operation>
+    <wsdl:operation name="ping">
+      <wsdl:documentation>Used to keep session id alive</wsdl:documentation>
+      <wsdl:input name="pingRequest" message="tns:pingRequest" />
+      <wsdl:output name="pingResponse" message="tns:pingResponse" />
+      <wsdl:fault name="fault" message="tns:pingFault" />
+    </wsdl:operation>
+    <wsdl:operation name="sendmsg">
+      <wsdl:documentation>Sends an SMS message to a mobile handset</wsdl:documentation>
+      <wsdl:input name="sendmsgRequest" message="tns:sendmsgRequest" />
+      <wsdl:output name="sendmsgResponse" message="tns:sendmsgResponse" />
+      <wsdl:fault name="fault" message="tns:sendmsgFault" />
+    </wsdl:operation>
+    <wsdl:operation name="querymsg">
+      <wsdl:documentation>Query the status of a message</wsdl:documentation>
+      <wsdl:input name="querymsgRequest" message="tns:querymsgRequest" />
+      <wsdl:output name="querymsgResponse" message="tns:querymsgResponse" />
+      <wsdl:fault name="fault" message="tns:querymsgFault" />
+    </wsdl:operation>
+    <wsdl:operation name="delmsg">
+      <wsdl:documentation>Stop a queued message under certain conditions - refer to API documentation</wsdl:documentation>
+      <wsdl:input name="delmsgRequest" message="tns:delmsgRequest" />
+      <wsdl:output name="delmsgResponse" message="tns:delmsgResponse" />
+      <wsdl:fault name="fault" message="tns:delmsgFault" />
+    </wsdl:operation>
+    <wsdl:operation name="getbalance">
+      <wsdl:documentation>Query the balance of authenticated account</wsdl:documentation>
+      <wsdl:input name="getbalanceRequest" message="tns:getbalanceRequest" />
+      <wsdl:output name="getbalanceResponse" message="tns:getbalanceResponse" />
+      <wsdl:fault name="fault" message="tns:getbalanceFault" />
+    </wsdl:operation>
+    <wsdl:operation name="routecoverage">
+      <wsdl:documentation>Check coverage for a specified number</wsdl:documentation>
+      <wsdl:input name="routecoverageRequest" message="tns:routecoverageRequest" />
+      <wsdl:output name="routecoverageResponse" message="tns:routecoverageResponse" />
+      <wsdl:fault name="fault" message="tns:routecoverageFault" />
+    </wsdl:operation>
+    <wsdl:operation name="si_push">
+      <wsdl:documentation>Send a WAP Push service indicator message(s)</wsdl:documentation>
+      <wsdl:input name="si_pushRequest" message="tns:si_pushRequest" />
+      <wsdl:output name="si_pushResponse" message="tns:si_pushResponse" />
+      <wsdl:fault name="fault" message="tns:si_pushFault" />
+    </wsdl:operation>
+    <wsdl:operation name="ind_push">
+      <wsdl:documentation>Send a MMS Push indicator message(s)</wsdl:documentation>
+      <wsdl:input name="ind_pushRequest" message="tns:ind_pushRequest" />
+      <wsdl:output name="ind_pushResponse" message="tns:ind_pushResponse" />
+      <wsdl:fault name="fault" message="tns:ind_pushFault" />
+    </wsdl:operation>
+    <wsdl:operation name="token_pay">
+      <wsdl:documentation>Redeem a voucher</wsdl:documentation>
+      <wsdl:input name="token_payRequest" message="tns:token_payRequest" />
+      <wsdl:output name="token_payResponse" message="tns:token_payResponse" />
+      <wsdl:fault name="fault" message="tns:token_payFault" />
+    </wsdl:operation>
+    <wsdl:operation name="startbatch">
+      <wsdl:documentation>Generate a batch ID for batch messaging</wsdl:documentation>
+      <wsdl:input name="startbatchRequest" message="tns:startbatchRequest" />
+      <wsdl:output name="startbatchResponse" message="tns:startbatchResponse" />
+      <wsdl:fault name="fault" message="tns:startbatchFault" />
+    </wsdl:operation>
+    <wsdl:operation name="senditem">
+      <wsdl:documentation>Send a message to an existing batch</wsdl:documentation>
+      <wsdl:input name="senditemRequest" message="tns:senditemRequest" />
+      <wsdl:output name="senditemResponse" message="tns:senditemResponse" />
+      <wsdl:fault name="fault" message="tns:senditemFault" />
+    </wsdl:operation>
+    <wsdl:operation name="quicksend">
+      <wsdl:documentation>Send the same message to multiple recipients</wsdl:documentation>
+      <wsdl:input name="quicksendRequest" message="tns:quicksendRequest" />
+      <wsdl:output name="quicksendResponse" message="tns:quicksendResponse" />
+      <wsdl:fault name="fault" message="tns:quicksendFault" />
+    </wsdl:operation>
+    <wsdl:operation name="endbatch">
+      <wsdl:documentation>Ends a batch</wsdl:documentation>
+      <wsdl:input name="endbatchRequest" message="tns:endbatchRequest" />
+      <wsdl:output name="endbatchResponse" message="tns:endbatchResponse" />
+      <wsdl:fault name="fault" message="tns:endbatchFault" />
+    </wsdl:operation>
+    <wsdl:operation name="getmsgcharge">
+      <wsdl:documentation>Query message charge and status</wsdl:documentation>
+      <wsdl:input name="getmsgchargeRequest" message="tns:getmsgchargeRequest" />
+      <wsdl:output name="getmsgchargeResponse" message="tns:getmsgchargeResponse" />
+      <wsdl:fault name="fault" message="tns:getmsgchargeFault" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Sms" type="tns:ClickatellSms">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="auth">
+      <wsdl:documentation>Authenticate to receive a session id</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/auth" />
+      <wsdl:input name="authRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="authResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ping">
+      <wsdl:documentation>Use to keep your session id alive</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/ping" />
+      <wsdl:input name="pingRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="pingResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendmsg">
+      <wsdl:documentation>Send one or more SMS messages</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/sendmsg" />
+      <wsdl:input name="sendmsgRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="sendmsgResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="querymsg">
+      <wsdl:documentation>Query the status of a message</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/querymsg" />
+      <wsdl:input name="querymsgRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="querymsgResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delmsg">
+      <wsdl:documentation>Stop a queued message under certain conditions - refer to API documentation</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/delmsg" />
+      <wsdl:input name="delmsgRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="delmsgResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getbalance">
+      <wsdl:documentation>Query the balance of authenticated account</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/getbalance" />
+      <wsdl:input name="getbalanceRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getbalanceResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="routecoverage">
+      <wsdl:documentation>Query the balance of authenticated account</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/routecoverage" />
+      <wsdl:input name="routecoverageRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="routecoverageResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="si_push">
+      <wsdl:documentation>Query the balance of authenticated account</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/si_push" />
+      <wsdl:input name="si_pushRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="si_pushResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ind_push">
+      <wsdl:documentation>Query the balance of authenticated account</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/ind_push" />
+      <wsdl:input name="ind_pushRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="ind_pushResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="token_pay">
+      <wsdl:documentation>Query the balance of authenticated account</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/token_pay" />
+      <wsdl:input name="token_payRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="token_payResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="startbatch">
+      <wsdl:documentation>Generate a batch ID for batch messaging</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/startbatch" />
+      <wsdl:input name="startbatchRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="startbatchResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="senditem">
+      <wsdl:documentation>Send a message to an existing batch</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/senditem" />
+      <wsdl:input name="senditemRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="senditemResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="quicksend">
+      <wsdl:documentation>Send the same message to multiple recipients</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/quicksend" />
+      <wsdl:input name="quicksendRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="quicksendResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="endbatch">
+      <wsdl:documentation>Ends a batch</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/endbatch" />
+      <wsdl:input name="endbatchRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="endbatchResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getmsgcharge">
+      <wsdl:documentation>Query message charge and status</wsdl:documentation>
+      <soap:operation soapAction="http://api.clickatell.com/soap/document_literal/webservice/getmsgcharge" />
+      <wsdl:input name="getmsgchargeRequest">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getmsgchargeResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ClickatellSms">
+    <wsdl:documentation>Clickatell SMS Gateway - SOAP API. This API can be used mainly to send SMSmessages and query the status of messages.</wsdl:documentation>
+    <wsdl:port name="ClickatellSms" binding="tns:Sms">
+      <wsdl:documentation />
+      <soap:address location="http://api.clickatell.com/soap/document_literal/webservice" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,8 +1,9 @@
 ﻿Group: SMS providers
 FriendlyName: Clickatell SMS Provider
 SystemName: Mobile.SMS.Clickatell
-Version: 1.06
-SupportedVersions: 3.70
+Version: 1.10
+SupportedVersions: 3.80
 Author: nopCommerce team
 DisplayOrder: 1
 FileName: Nop.Plugin.SMS.Clickatell.dll
+Description: This plugin allows to integrate with Clickatell. A store owner can receive SMS messages when a customer places an order.
