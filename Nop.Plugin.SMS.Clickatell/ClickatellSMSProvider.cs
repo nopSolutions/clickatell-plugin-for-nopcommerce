@@ -110,7 +110,7 @@ namespace Nop.Plugin.SMS.Clickatell
         {
             actionName = "Configure";
             controllerName = "SmsClickatell";
-            routeValues = new RouteValueDictionary() { { "Namespaces", "Nop.Plugin.SMS.Clickatell.Controllers" }, { "area", null } };
+            routeValues = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.SMS.Clickatell.Controllers" }, { "area", null } };
         }
 
         /// <summary>

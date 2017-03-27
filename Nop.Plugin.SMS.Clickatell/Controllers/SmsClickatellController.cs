@@ -66,7 +66,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
                 model.PhoneNumber_OverrideForStore = _settingService.SettingExists(clickatellSettings, x => x.PhoneNumber, storeScope);
             }
 
-            return View("~/Plugins/SMS.Clickatell/Views/SmsClickatell/Configure.cshtml", model);
+            return View("~/Plugins/SMS.Clickatell/Views/Configure.cshtml", model);
         }
 
         [ChildActionOnly]
