@@ -31,14 +31,10 @@ namespace Nop.Plugin.SMS.Clickatell.Infrastructure.Cache
         {
             //check that plugin is installed
             var pluginDescriptor = _pluginFinder.GetPluginDescriptorBySystemName("Mobile.SMS.Clickatell");
-            if (pluginDescriptor == null)
-                return;
 
-            var plugin = pluginDescriptor.Instance() as ClickatellSmsProvider;
-            if (plugin == null)
-                return;
+            var plugin = pluginDescriptor?.Instance() as ClickatellSmsProvider;
 
-            plugin.SendSms(string.Empty, eventMessage.Order.Id);
+            plugin?.SendSms(string.Empty, eventMessage.Order.Id);
         }
 
         #endregion

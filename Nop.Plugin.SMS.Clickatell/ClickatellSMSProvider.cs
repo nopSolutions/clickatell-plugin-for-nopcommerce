@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.ServiceModel;
-using System.Web.Routing;
+using Nop.Core;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Plugins;
 using Nop.Plugin.SMS.Clickatell.Clickatell;
@@ -24,6 +24,7 @@ namespace Nop.Plugin.SMS.Clickatell
         private readonly ILogger _logger;
         private readonly IOrderService _orderService;
         private readonly ISettingService _settingService;
+        private readonly IWebHelper _webHelper;
 
         #endregion
 
@@ -32,12 +33,14 @@ namespace Nop.Plugin.SMS.Clickatell
         public ClickatellSmsProvider(ClickatellSettings clickatellSettings,
             ILogger logger,
             IOrderService orderService,
-            ISettingService settingService)
+            ISettingService settingService,
+            IWebHelper webHelper)
         {
             this._clickatellSettings = clickatellSettings;
             this._logger = logger;
             this._orderService = orderService;
             this._settingService = settingService;
+            this._webHelper = webHelper;
         }
 
         #endregion
@@ -60,7 +63,7 @@ namespace Nop.Plugin.SMS.Clickatell
             //change text
             var order = _orderService.GetOrderById(orderId);
             if (order != null)
-                text = string.Format("New order #{0} was placed for the total amount {1:0.00}", order.Id, order.OrderTotal);
+                text = $"New order #{order.Id} was placed for the total amount {order.OrderTotal:0.00}";
 
             using (var smsClient = new ClickatellSmsClient(new BasicHttpBinding(), new EndpointAddress("http://api.clickatell.com/soap/document_literal/webservice")))
             {
@@ -68,7 +71,7 @@ namespace Nop.Plugin.SMS.Clickatell
                 var authentication = smsClient.auth(int.Parse(clickatellSettings.ApiId), clickatellSettings.Username, clickatellSettings.Password);
                 if (!authentication.ToUpperInvariant().StartsWith("OK"))
                 {
-                    _logger.Error(string.Format("Clickatell SMS error: {0}", authentication));
+                    _logger.Error($"Clickatell SMS error: {authentication}");
                     return false;
                 }
 
@@ -80,7 +83,7 @@ namespace Nop.Plugin.SMS.Clickatell
 
                 if (result == null || !result.ToUpperInvariant().StartsWith("ID"))
                 {
-                    _logger.Error(string.Format("Clickatell SMS error: {0}", result));
+                    _logger.Error($"Clickatell SMS error: {result}");
                     return false;
                 }
             }
@@ -100,17 +103,9 @@ namespace Nop.Plugin.SMS.Clickatell
             return true;
         }
 
-        /// <summary>
-        /// Gets a route for provider configuration
-        /// </summary>
-        /// <param name="actionName">Action name</param>
-        /// <param name="controllerName">Controller name</param>
-        /// <param name="routeValues">Route values</param>
-        public void GetConfigurationRoute(out string actionName, out string controllerName, out RouteValueDictionary routeValues)
+        public override string GetConfigurationPageUrl()
         {
-            actionName = "Configure";
-            controllerName = "SmsClickatell";
-            routeValues = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.SMS.Clickatell.Controllers" }, { "area", null } };
+            return $"{_webHelper.GetStoreLocation()}Admin/SmsClickatell/Configure";
         }
 
         /// <summary>

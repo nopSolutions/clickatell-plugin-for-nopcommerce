@@ -1,17 +1,21 @@
 ﻿using System;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Plugins;
 using Nop.Plugin.Sms.Clickatell.Models;
 using Nop.Plugin.SMS.Clickatell;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
+using Nop.Services.Security;
 using Nop.Services.Stores;
+using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.Sms.Clickatell.Controllers
 {
-    [AdminAuthorize]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
     public class SmsClickatellController : BasePluginController
     {
         #region Fields
@@ -21,6 +25,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
         private readonly ISettingService _settingService;
         private readonly IStoreService _storeService;
         private readonly IWorkContext _workContext;
+        private readonly IPermissionService _permissionService;
 
         #endregion
 
@@ -30,22 +35,26 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
             IPluginFinder pluginFinder,
             ISettingService settingService,
             IStoreService storeService,
-            IWorkContext workContext)
+            IWorkContext workContext,
+            IPermissionService permissionService)
         {
             this._localizationService = localizationService;
             this._pluginFinder = pluginFinder;
             this._settingService = settingService;            
             this._storeService = storeService;
             this._workContext = workContext;
+            this._permissionService = permissionService;
         }
 
         #endregion
 
         #region Methods
 
-        [ChildActionOnly]
-        public ActionResult Configure()
+        public IActionResult Configure()
         {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return AccessDeniedView();
+
             //load settings for a chosen store scope
             var storeScope = GetActiveStoreScopeConfiguration(_storeService, _workContext);
             var clickatellSettings = _settingService.LoadSetting<ClickatellSettings>(storeScope);
@@ -69,11 +78,14 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
             return View("~/Plugins/SMS.Clickatell/Views/Configure.cshtml", model);
         }
 
-        [ChildActionOnly]
+
         [HttpPost, ActionName("Configure")]
         [FormValueRequired("save")]
-        public ActionResult Configure(SmsClickatellModel model)
+        public IActionResult Configure(SmsClickatellModel model)
         {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return AccessDeniedView();
+
             if (!ModelState.IsValid)
                 return Configure();
 
@@ -105,10 +117,9 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
             return Configure();
         }
 
-        [ChildActionOnly]
         [HttpPost, ActionName("Configure")]
         [FormValueRequired("test")]
-        public ActionResult TestSms(SmsClickatellModel model)
+        public IActionResult TestSms(SmsClickatellModel model)
         {
             if (!ModelState.IsValid)
                 return Configure();

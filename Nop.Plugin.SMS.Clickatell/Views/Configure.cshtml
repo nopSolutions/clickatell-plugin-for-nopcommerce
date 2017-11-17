@@ -1,70 +1,69 @@
 ﻿@{
-    Layout = "";
+    Layout = "_ConfigurePlugin";
 }
+
 @model Nop.Plugin.Sms.Clickatell.Models.SmsClickatellModel
-@using Nop.Web.Framework;
 
-@Html.Action("StoreScopeConfiguration", "Setting", new { area = "Admin" })
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+@await Component.InvokeAsync("StoreScopeConfiguration")
+
+<form asp-controller="SmsClickatell" asp-action="Configure" method="post">
     <div class="panel-group">
         <div class="panel panel-default">
             <div class="panel-body">
                 <p>
                     To receive an SMS notification when an order is placed from your store you need to follow a few simple steps, which are shown below:<br />
                     1. Register for a <a href="http://www.clickatell.com" target='_blank'>Clickatell account</a><br />
-                       Clickatell works with all countries and includes 100 free credits so you can test SMS notifications.<br />
+                    Clickatell works with all countries and includes 100 free credits so you can test SMS notifications.<br />
                     2. Set up new SOAP API. <br />
                     3. Fill in the form below with your Clickatell account details, including the number you want the notification messages to be sent to.<br />
-                       Now when you receive a new order, an SMS text message will be sent to the number you enter below automatically.
+                    Now when you receive a new order, an SMS text message will be sent to the number you enter below automatically.
                 </p>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.Enabled_OverrideForStore, model => model.Enabled, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.Enabled)
+                        <nop-override-store-checkbox asp-for="Enabled_OverrideForStore" asp-input="Enabled" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="Enabled" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.Enabled)
-                        @Html.ValidationMessageFor(model => model.Enabled)
+                        <nop-editor asp-for="Enabled" />
+                        <span asp-validation-for="Enabled"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.NopLabelFor(model => model.ApiId)
+                        <nop-label asp-for="ApiId" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.ApiId)
-                        @Html.ValidationMessageFor(model => model.ApiId)
+                        <nop-editor asp-for="ApiId" />
+                        <span asp-validation-for="ApiId"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.NopLabelFor(model => model.Username)
+                        <nop-label asp-for="Username" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.Username)
-                        @Html.ValidationMessageFor(model => model.Username)
+                        <nop-editor asp-for="Username" />
+                        <span asp-validation-for="Username"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.NopLabelFor(model => model.Password)
+                        <nop-label asp-for="Password" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.Password)
-                        @Html.ValidationMessageFor(model => model.Password)
+                        <nop-editor asp-for="Password" />
+                        <span asp-validation-for="Password"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.OverrideStoreCheckboxFor(model => model.PhoneNumber_OverrideForStore, model => model.PhoneNumber, Model.ActiveStoreScopeConfiguration)
-                        @Html.NopLabelFor(model => model.PhoneNumber)
+                        <nop-override-store-checkbox asp-for="PhoneNumber_OverrideForStore" asp-input="PhoneNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="PhoneNumber" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.PhoneNumber)
-                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                        <nop-editor asp-for="PhoneNumber" />
+                        <span asp-validation-for="PhoneNumber"></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -81,11 +80,11 @@
             <div class="panel-body">
                 <div class="form-group">
                     <div class="col-md-3">
-                        @Html.NopLabelFor(model => model.TestMessage)
+                        <nop-label asp-for="TestMessage" />
                     </div>
                     <div class="col-md-9">
-                        @Html.NopEditorFor(model => model.TestMessage)
-                        @Html.ValidationMessageFor(model => model.TestMessage)
+                        <nop-editor asp-for="TestMessage" />
+                        <span asp-validation-for="TestMessage"></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -96,4 +95,4 @@
             </div>
         </div>
     </div>
-}
+</form>
