@@ -1,6 +1,6 @@
 ﻿using Nop.Core.Domain.Orders;
-using Nop.Core.Plugins;
 using Nop.Services.Events;
+using Nop.Services.Plugins;
 
 namespace Nop.Plugin.SMS.Clickatell.Infrastructure.Cache
 {

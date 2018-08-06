@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
-using Nop.Core.Plugins;
 using Nop.Plugin.Sms.Clickatell.Models;
 using Nop.Plugin.SMS.Clickatell;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
+using Nop.Services.Plugins;
 using Nop.Services.Security;
 using Nop.Services.Stores;
 using Nop.Web.Framework;
@@ -23,27 +23,26 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly IPluginFinder _pluginFinder;
         private readonly ISettingService _settingService;
-        private readonly IStoreService _storeService;
-        private readonly IWorkContext _workContext;
         private readonly IPermissionService _permissionService;
+        private readonly IStoreContext _storeContext;
 
         #endregion
 
         #region Ctor
 
         public SmsClickatellController(ILocalizationService localizationService,
+            IPermissionService permissionService,
             IPluginFinder pluginFinder,
             ISettingService settingService,
-            IStoreService storeService,
-            IWorkContext workContext,
-            IPermissionService permissionService)
+            IStoreContext storeContext,
+            IStoreService storeService)
+
         {
             this._localizationService = localizationService;
-            this._pluginFinder = pluginFinder;
-            this._settingService = settingService;            
-            this._storeService = storeService;
-            this._workContext = workContext;
             this._permissionService = permissionService;
+            this._pluginFinder = pluginFinder;
+            this._settingService = settingService;
+            this._storeContext = storeContext;
         }
 
         #endregion
@@ -56,7 +55,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
                 return AccessDeniedView();
 
             //load settings for a chosen store scope
-            var storeScope = GetActiveStoreScopeConfiguration(_storeService, _workContext);
+            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
             var clickatellSettings = _settingService.LoadSetting<ClickatellSettings>(storeScope);
 
             var model = new SmsClickatellModel
@@ -90,7 +89,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
                 return Configure();
 
             //load settings for a chosen store scope
-            var storeScope = GetActiveStoreScopeConfiguration(_storeService, _workContext);
+            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
             var clickatellSettings = _settingService.LoadSetting<ClickatellSettings>(storeScope);
 
             //save settings
@@ -133,7 +132,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
                 throw new Exception("Cannot load the plugin");
 
             //load settings for a chosen store scope
-            var storeScope = GetActiveStoreScopeConfiguration(_storeService, _workContext);
+            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
             var clickatellSettings = _settingService.LoadSetting<ClickatellSettings>(storeScope);
 
             //test SMS send

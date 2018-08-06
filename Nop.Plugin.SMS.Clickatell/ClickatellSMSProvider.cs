@@ -25,6 +25,7 @@ namespace Nop.Plugin.SMS.Clickatell
         private readonly IOrderService _orderService;
         private readonly ISettingService _settingService;
         private readonly IWebHelper _webHelper;
+        private readonly ILocalizationService _localizationService;
 
         #endregion
 
@@ -34,13 +35,15 @@ namespace Nop.Plugin.SMS.Clickatell
             ILogger logger,
             IOrderService orderService,
             ISettingService settingService,
-            IWebHelper webHelper)
+            IWebHelper webHelper,
+            ILocalizationService localizationService)
         {
             this._clickatellSettings = clickatellSettings;
             this._logger = logger;
             this._orderService = orderService;
             this._settingService = settingService;
             this._webHelper = webHelper;
+            this._localizationService = localizationService;
         }
 
         #endregion
@@ -117,22 +120,22 @@ namespace Nop.Plugin.SMS.Clickatell
             _settingService.SaveSetting(new ClickatellSettings());
 
             //locales
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId", "API ID");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId.Hint", "Specify Clickatell API ID.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled", "Enabled");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint", "Check to enable SMS provider.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password", "Password");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password.Hint", "Specify Clickatell API password.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber", "Phone number");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber.Hint", "Enter your phone number.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage", "Message text");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage.Hint", "Enter text of the test message.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username", "Username");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint", "Specify Clickatell API username.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.SendTest", "Send");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.SendTest.Hint", "Send test message");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed", "Test message sending failed");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess", "Test message was sent");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId", "API ID");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId.Hint", "Specify Clickatell API ID.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled", "Enabled");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint", "Check to enable SMS provider.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password", "Password");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password.Hint", "Specify Clickatell API password.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber", "Phone number");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber.Hint", "Enter your phone number.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage", "Message text");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage.Hint", "Enter text of the test message.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username", "Username");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint", "Specify Clickatell API username.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.SendTest", "Send");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.SendTest.Hint", "Send test message");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed", "Test message sending failed");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess", "Test message was sent");
 
             base.Install();
         }
@@ -146,22 +149,22 @@ namespace Nop.Plugin.SMS.Clickatell
             _settingService.DeleteSetting<ClickatellSettings>();
 
             //locales
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.SendTest");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.SendTest.Hint");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed");
-            this.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.ApiId.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Enabled.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Password.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.PhoneNumber.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.TestMessage.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.Fields.Username.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.SendTest");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.SendTest.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestFailed");
+            _localizationService.DeletePluginLocaleResource("Plugins.Sms.Clickatell.TestSuccess");
 
             base.Uninstall();
         }
