@@ -5,7 +5,7 @@ using Nop.Plugin.Sms.Clickatell.Models;
 using Nop.Plugin.SMS.Clickatell;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
-using Nop.Services.Plugins;
+using Nop.Services.Messages;
 using Nop.Services.Security;
 using Nop.Services.Stores;
 using Nop.Web.Framework;
@@ -21,8 +21,9 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
         #region Fields
 
         private readonly ILocalizationService _localizationService;
-        private readonly IPluginFinder _pluginFinder;
-        private readonly ISettingService _settingService;
+        private readonly ISMSPluginFinder _pluginFinder;
+        private readonly INotificationService _notificationService;
+        private readonly ISettingService _settingService;  
         private readonly IPermissionService _permissionService;
         private readonly IStoreContext _storeContext;
 
@@ -32,10 +33,11 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
 
         public SmsClickatellController(ILocalizationService localizationService,
             IPermissionService permissionService,
-            IPluginFinder pluginFinder,
+            ISMSPluginFinder pluginFinder,
             ISettingService settingService,
             IStoreContext storeContext,
-            IStoreService storeService)
+            IStoreService storeService,
+            INotificationService notificationService)
 
         {
             this._localizationService = localizationService;
@@ -43,6 +45,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
             this._pluginFinder = pluginFinder;
             this._settingService = settingService;
             this._storeContext = storeContext;
+            this._notificationService = notificationService;
         }
 
         #endregion
@@ -111,7 +114,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
             //now clear settings cache
             _settingService.ClearCache();
 
-            SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }
@@ -123,11 +126,11 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
             if (!ModelState.IsValid)
                 return Configure();
 
-            var pluginDescriptor = _pluginFinder.GetPluginDescriptorBySystemName("Mobile.SMS.Clickatell");
+            var pluginDescriptor = _pluginFinder.LoadPluginBySystemName("Mobile.SMS.Clickatell");
             if (pluginDescriptor == null)
                 throw new Exception("Cannot load the plugin");
 
-            var plugin = pluginDescriptor.Instance() as ClickatellSmsProvider;
+            var plugin = pluginDescriptor.PluginDescriptor.Instance<ISMSMethod>() as ClickatellSmsProvider;
             if (plugin == null)
                 throw new Exception("Cannot load the plugin");
 
@@ -137,10 +140,13 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
 
             //test SMS send
             if (plugin.SendSms(model.TestMessage, 0, clickatellSettings))
-                SuccessNotification(_localizationService.GetResource("Plugins.Sms.Clickatell.TestSuccess"));
+            {
+                _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Sms.Clickatell.TestSuccess"));
+            }
             else
-                ErrorNotification(_localizationService.GetResource("Plugins.Sms.Clickatell.TestFailed"));
-
+            {
+                _notificationService.ErrorNotification(_localizationService.GetResource("Plugins.Sms.Clickatell.TestFailed"));
+            }
             return Configure();
         }
 
