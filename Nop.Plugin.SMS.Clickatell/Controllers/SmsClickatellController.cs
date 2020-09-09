@@ -23,7 +23,7 @@ namespace Nop.Plugin.Sms.Clickatell.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly ISMSPluginFinder _pluginFinder;
         private readonly INotificationService _notificationService;
-        private readonly ISettingService _settingService;
+        private readonly ISettingService _settingService;  
         private readonly IPermissionService _permissionService;
         private readonly IStoreContext _storeContext;
 
